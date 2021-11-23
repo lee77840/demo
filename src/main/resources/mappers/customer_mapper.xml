@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.demo.mapper.customer.CustomerMapper">
+	
+	<select id="retrieveAll" resultType="Customer">
+		<![CDATA[
+		SELECT
+			EMAIL,
+			FIRSTNAME,
+			LASTNAME,
+			STORE_NAME,
+			ORG_NAME,
+			NEWS_SUBSCRIBE
+		  FROM
+		  	CUSTOMER
+		 WHERE 1=1
+		   --AND ACTIVE_YN = 'Y'
+		   --AND ACCOUNT_LOCK_YN = 'N'
+		]]>
+	</select>
+	
+	<select id="duplicateEmail" resultType="boolean">
+		<![CDATA[
+		SELECT
+			CASE 
+				WHEN COUNT(1) >= 1 THEN true
+				WHEN COUNT(1) = 0 THEN false
+				ELSE false
+			END
+		  FROM CUSTOMER
+		 WHERE EMAIL = #{email}
+		   AND STORE_NAME = #{storeName}
+		]]>
+	</select>
+	
+	<select id="retrieveByEmail" resultType="Customer">
+		<![CDATA[
+		SELECT
+			EMAIL,
+			FIRSTNAME,
+			LASTNAME,
+			STORE_NAME,
+			ORG_NAME,
+			NEWS_SUBSCRIBE
+		  FROM
+		  	CUSTOMER
+		 WHERE 1=1
+		   AND EMAIL = #{email}
+		   AND STORE_NAME = #{storeName}
+		   AND ACTIVE_YN = 'Y'
+		   AND ACCOUNT_LOCK_YN = 'N'
+		]]>
+	</select>
+	
+	<insert id="saveCustomer" parameterType="Customer">
+		<![CDATA[
+		INSERT INTO CUSTOMER(
+			EMAIL,
+			PASSWORD,
+			FIRSTNAME,
+			LASTNAME,
+			STORE_NAME,
+			ORG_NAME,
+			NEWS_SUBSCRIBE,
+			CREATED_BY,
+			CREATED_DATE,
+			LAST_MODIFIED_BY,
+			LAST_MODIFIED_DATE,
+			STATUS
+		) VALUES (
+			#{email},
+			#{password},
+			#{firstname},
+			#{lastname},
+			#{storeName},
+			#{orgName},
+			#{newsSubscribe},
+			#{createdBy},
+			CURRENT_TIMESTAMP,
+			#{lastModifiedBy},
+			CURRENT_TIMESTAMP,
+			#{status, typeHandler = org.apache.ibatis.type.EnumOrdinalTypeHandler}
+		)
+		]]>
+    </insert>
+	
+</mapper>

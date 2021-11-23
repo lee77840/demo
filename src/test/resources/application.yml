@@ -1,0 +1,212 @@
+argon2:
+  saltLength: '16'
+  outputLength: '32'
+  opsLimit: '2'
+  version: '2'
+  parallelism: '1'
+  memLimit: '65536'
+ 
+accountlock:
+   maxFailedAttempt : '5'
+   lockoutMinutes : '10'
+   
+logging:
+  level:
+    org:
+      springframework.web: DEBUG
+      hibernat: DEBUG
+    com:
+      atoz_develop:
+        mybatissample:
+          repository: TRACE
+          
+mybatis:
+  mapper-locations: classpath:/mappers/*.xml
+  type-aliases-package: com.demo.entity
+  configuration:
+    map-underscore-to-camel-case: 'true'
+    
+debug: 'true'
+
+passwordReset:
+    rpTokenExpiryMinutes : '10'
+    
+spring:
+  profiles:
+    group:
+      "LOCAL": "LOCALDB,COMMON"
+      "DEV": "DEVDB,COMMON"
+      "QA": "QADB,COMMON"
+      "STG": "STGDB,COMMON"
+      "PROD": "PRODDB,COMMON"
+---
+
+spring:
+  config:
+    activate:
+      on-profile:
+      - "TESTDB"
+  jpa:
+    generate-ddl: 'false'
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: 'true'
+        dialect: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: 'true'
+  datasource:
+    driverClassName: org.h2.Driver
+    password: password
+    username: sa
+    url: jdbc:h2:~/test;
+  h2:
+    console:
+      path: /h2-console
+      enabled: 'true'
+      settings:
+        web-allow-others: 'true'
+        
+---
+
+spring:
+  config:
+    activate:
+      on-profile:
+      - "LOCALDB"
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+    platform: postgres
+    password: postgres
+  jpa:
+    generate-ddl: 'false'
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+    
+---
+
+spring:
+  config:
+    activate:
+      on-profile:
+      - "DEVDB"
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+    platform: postgres
+    password: postgres
+  jpa:
+    generate-ddl: 'false'
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile:
+      - "QADB"
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+    platform: postgres
+    password: postgres
+  jpa:
+    generate-ddl: 'false'
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile:
+      - "STGDB"
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+    platform: postgres
+    password: postgres
+  jpa:
+    generate-ddl: 'false'
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile:
+      - "PRODDB"
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+    platform: postgres
+    password: postgres
+  jpa:
+    generate-ddl: 'false'
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+    
+---
+
+spring:
+  config:
+    activate:
+      on-profile:
+      - "COMMON"
+  mail:
+    host: test
+    port: 587
+    protocol: smtp
+    test-connection: false
+    username: test
+    password: test
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+  mvc:
+    http:
+      log-request-details: true
+     
+aws.ses.sender: test@test.com
